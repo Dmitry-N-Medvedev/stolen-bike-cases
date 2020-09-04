@@ -1,0 +1,32 @@
+{
+  "name": "@dmitry-n-medvedev/stolen-bike-cases-libapi",
+  "version": "0.0.0",
+  "engines": {
+    "node": "14.9.0",
+    "pnpm": "5.5.10"
+  },
+  "engineStrict": true,
+  "description": "[lib] Stolen Bike Cases",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmitry-N-Medvedev/stolen-bike-cases.git"
+  },
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dmitry-N-Medvedev/stolen-bike-cases/issues"
+  },
+  "homepage": "https://github.com/Dmitry-N-Medvedev/stolen-bike-cases#readme",
+  "dependencies": {
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v18.4.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-chai-friendly": "^0.6.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0"
+  }
+}
