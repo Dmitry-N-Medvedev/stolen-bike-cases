@@ -1,0 +1,21 @@
+{
+  "name": "@dmitry-n-medvedev/stolen-bike-cases",
+  "version": "0.0.0",
+  "engines": {
+    "node": "14.9.0",
+    "pnpm": "5.5.10"
+  },
+  "engineStrict": true,
+  "description": "Stolen Bike Cases",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmitry-N-Medvedev/stolen-bike-cases.git"
+  },
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dmitry-N-Medvedev/stolen-bike-cases/issues"
+  },
+  "homepage": "https://github.com/Dmitry-N-Medvedev/stolen-bike-cases#readme"
+}
