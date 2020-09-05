@@ -1,0 +1,21 @@
+dist: bionic
+language: node_js
+node_js:
+  - 14.9.0
+os: linux
+before_install:
+  - curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | PNPM_VERSION=next node
+  - pnpm config set store-dir ~/.pnpm-store
+  - pnpm --version
+install:
+  - pnpm --recursive install
+script:
+  - pnpm --recursive run test
+cache:
+  npm: false
+  directories:
+    - "~/.pnpm-store"
+script:
+  - pnpm --recursive run test
+after_success:
+  - pnpm --recursive run coverage
