@@ -6,8 +6,14 @@
     "pnpm": "5.5.10"
   },
   "engineStrict": true,
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint ./ --ext .js --ext .mjs",
+    "pretest": "pnpm run lint && pnpm audit",
+    "test": "cross-env NODE_ENV=test NODE_DEBUG=LibAPI ./node_modules/.bin/nyc ./node_modules/.bin/mocha -- --experimental-json-modules --trace-warnings",
+    "coverage": "./node_modules/.bin/nyc report reporter=text-lcov | ./node_modules/.bin/coveralls"
+  },
   "description": "[lib] Stolen Bike Cases",
-  "main": "index.js",
+  "module": "LibAPI.mjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Dmitry-N-Medvedev/stolen-bike-cases.git"
@@ -23,10 +29,66 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
+    "chai": "^4.2.0",
+    "coveralls": "^3.1.0",
+    "cross-env": "^7.0.2",
     "eslint": "^7.8.1",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-chai-friendly": "^0.6.0",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-node": "^11.1.0"
+    "eslint-plugin-node": "^11.1.0",
+    "mocha": "^8.1.3",
+    "nanoid": "^3.1.12",
+    "nyc": "^15.1.0"
+  },
+  "nyc": {
+    "all": true,
+    "exclude": [
+      "**/*.spec.mjs"
+    ],
+    "branches": 80,
+    "lines": 80,
+    "functions": 80,
+    "statements": 80,
+    "watermarks": {
+      "lines": [
+        80,
+        95
+      ],
+      "functions": [
+        80,
+        95
+      ],
+      "branches": [
+        80,
+        95
+      ],
+      "statements": [
+        80,
+        95
+      ]
+    }
+  },
+  "mocha": {
+    "allow-uncaught": false,
+    "async-only": true,
+    "bail": true,
+    "check-leaks": true,
+    "exit": true,
+    "forbid-only": false,
+    "forbid-pending": true,
+    "slow": 50,
+    "timeout": 1000,
+    "color": true,
+    "diff": true,
+    "full-trace": true,
+    "growl": false,
+    "inline-diffs": true,
+    "reporter": "spec",
+    "no-config": true,
+    "no-opts": true,
+    "spec": [
+      "./specs/*.mjs"
+    ]
   }
 }
