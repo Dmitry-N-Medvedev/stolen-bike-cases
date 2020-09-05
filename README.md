@@ -1,5 +1,8 @@
 # Stolen Bike Cases - JOIN Coding Challenge - Backend (Node.js)
 
+[![Build Status](https://travis-ci.com/Dmitry-N-Medvedev/stolen-bike-cases.svg?branch=master)](https://travis-ci.com/Dmitry-N-Medvedev/stolen-bike-cases)
+[![Coverage Status](https://coveralls.io/repos/github/Dmitry-N-Medvedev/stolen-bike-cases/badge.svg?branch=master)](https://coveralls.io/github/Dmitry-N-Medvedev/stolen-bike-cases?branch=master)
+
 ![JOIN Stolen Bike Cases](https://github.com/join-com/coding-challenge-backend-nodejs/raw/master/illustration.png)
 
 ## Context
