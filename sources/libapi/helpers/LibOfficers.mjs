@@ -1,40 +1,42 @@
 import EventEmitter from 'events';
-import {
-  OfficerIdUndefinedError,
-} from '../errors/LibOfficers.OfficerIdUndefinedError.mjs';
+import Ajv from 'ajv';
+import OfficerSchema from '../validator_schema/officer.schema.mjs';
 
-const verifyOfficerId = (id = null) => {
-  if (id === null) {
-    throw new OfficerIdUndefinedError('Officer ID is undefined');
-  }
+const ajv = new Ajv({
+  allErrors: true,
+  verbose: true,
+  unknownFormats: false,
+});
 
-  if (typeof id !== 'string') {
-    throw new TypeError('Officer ID is not a string');
-  }
-};
+const validateOfficer = ajv.compile(OfficerSchema);
 
 export class LibOfficers extends EventEmitter {
   #officers = new Map();
 
-  addOfficer(id) {
-    verifyOfficerId(id);
+  addOfficer(officer) {
+    const isOfficerValid = validateOfficer(officer);
 
-    if (this.#officers.has(id) === false) {
-      this.#officers.set(id, {
-        id,
+    if (isOfficerValid === false) {
+      this.emit('error:validation', {
+        officer,
+        errors: validateOfficer.errors,
       });
 
-      this.emit('officer:added', this.#officers.get(id));
+      return;
+    }
+
+    if (this.#officers.has(officer.id) === false) {
+      this.#officers.set(officer.id, {
+        id: officer.id,
+      });
+
+      this.emit('officer:added', officer.id);
     }
   }
 
   removeOfficer(id) {
-    verifyOfficerId(id);
-
     if (this.#officers.delete(id) === true) {
-      this.emit('officer:removed', {
-        id,
-      });
+      this.emit('officer:removed', id);
     }
   }
 

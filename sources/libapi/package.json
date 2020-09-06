@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "engines": {
     "node": "14.9.0",
-    "pnpm": "5.5.10"
+    "pnpm": "5.5.11"
   },
   "engineStrict": true,
   "scripts": {
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Dmitry-N-Medvedev/stolen-bike-cases#readme",
   "dependencies": {
+    "ajv": "^6.12.4",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v18.4.0"
   },
   "devDependencies": {

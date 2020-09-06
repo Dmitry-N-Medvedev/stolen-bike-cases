@@ -4,7 +4,7 @@ node_js:
   - 14.9.0
 os: linux
 before_install:
-  - curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | PNPM_VERSION=next node
+  - curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | PNPM_VERSION=5.5.11 node
   - pnpm config set store-dir ~/.pnpm-store
   - pnpm --version
 install:

@@ -4,9 +4,6 @@ import {
 import mocha from 'mocha';
 import chai from 'chai';
 import {
-  OfficerIdUndefinedError,
-} from '../errors/LibOfficers.OfficerIdUndefinedError.mjs';
-import {
   LibOfficers,
 } from '../helpers/LibOfficers.mjs';
 
@@ -31,57 +28,73 @@ describe('LibOfficers', () => {
     libOfficers = null;
   });
 
-  it('should addOfficer', () => new Promise((resolve) => {
-    const officerId = nanoid(5);
+  it('should fail to addOfficer with incorrect parameters', async () => {
+    const officerDefinitions = [
+      {
+        officer: {},
+        errors: [
+          {
+            keyword: 'required',
+            dataPath: '.officer',
+            params: {
+              missingProperty: 'id',
+            },
+          },
+        ],
+      },
+    ];
 
-    libOfficers.on('officer:added', (officer) => {
-      expect(libOfficers.OfficersNumber).to.equal(1);
-      expect(officer.id).to.equal(officerId);
+    const run = () => new Promise((resolve, reject) => {
+      const expectedNumOfErrors = officerDefinitions.reduce(
+        (acc, officerDefinition) => acc + officerDefinition.errors.length,
+        0,
+      );
+      let numOfProcessedErrors = 0;
+      const processValidationError = (officer, errors) => {
+        numOfProcessedErrors += errors.length;
+        if (numOfProcessedErrors === expectedNumOfErrors) {
+          resolve();
+        }
+      };
 
-      resolve();
-    });
-
-    expect(libOfficers.OfficersNumber).to.equal(0);
-
-    libOfficers.addOfficer(officerId);
-  }));
-
-  it('should fail to addOfficer when officerId is undefined', async () => {
-    const officerId = null;
-
-    try {
-      libOfficers.addOfficer(officerId);
-    } catch (error) {
-      expect(error).to.be.instanceOf(OfficerIdUndefinedError);
-    }
-  });
-
-  it('should fail to addOfficer when officerId is not a string', async () => {
-    const officerId = 0;
-
-    try {
-      libOfficers.addOfficer(officerId);
-    } catch (error) {
-      expect(error).to.be.instanceOf(TypeError);
-    }
-  });
-
-  it('should removeOfficer', () => new Promise((resolve) => {
-    const officerId = nanoid(5);
-
-    const doAddOfficer = (id) => new Promise((addOfficerOK) => {
-      libOfficers.on('officer:added', (officer) => {
-        expect(officer.id).to.equal(officerId);
-
-        addOfficerOK(officer);
+      libOfficers.on('officer:added', () => {
+        reject(new Error('officer:added event is unexpected'));
       });
 
-      libOfficers.addOfficer(id);
+      libOfficers.on('error:validation', ({
+        officer,
+        errors,
+      }) => {
+        processValidationError(officer, errors);
+      });
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const officerDefinition of officerDefinitions) {
+        libOfficers.addOfficer(officerDefinition.officer);
+      }
+    });
+
+    return run();
+  });
+
+  it('should addOfficer/removeOfficer', () => new Promise((resolve) => {
+    const officer = {
+      id: nanoid(5),
+    };
+
+    const doAddOfficer = (newOfficer) => new Promise((addOfficerOK) => {
+      libOfficers.once('officer:added', (newOfficerId) => {
+        expect(officer.id).to.equal(newOfficerId);
+
+        addOfficerOK(newOfficerId);
+      });
+
+      libOfficers.addOfficer(newOfficer);
     });
 
     const doRemoveOfficer = (id) => new Promise((removeOfficerOK) => {
-      libOfficers.on('officer:removed', (officer) => {
-        expect(officer.id).to.equal(officerId);
+      libOfficers.once('officer:removed', (removedOfficerId) => {
+        expect(officer.id).to.equal(removedOfficerId);
 
         removeOfficerOK();
       });
@@ -89,9 +102,9 @@ describe('LibOfficers', () => {
       libOfficers.removeOfficer(id);
     });
 
-    doAddOfficer(officerId)
-      .then(async (officer) => {
-        await doRemoveOfficer(officer.id);
+    doAddOfficer(officer)
+      .then(async (newOfficerId) => {
+        await doRemoveOfficer(newOfficerId);
 
         resolve();
       });
