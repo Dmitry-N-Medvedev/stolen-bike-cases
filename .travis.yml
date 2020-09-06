@@ -15,7 +15,5 @@ cache:
   npm: false
   directories:
     - "~/.pnpm-store"
-script:
-  - pnpm --recursive run test
 after_success:
   - pnpm --recursive run coverage
