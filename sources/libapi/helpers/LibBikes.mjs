@@ -24,9 +24,7 @@ export class LibBikes extends EventEmitter {
     }
 
     if (this.#bikes.has(bike.id) === false) {
-      this.#bikes.set(bike.id, {
-        id: bike.id,
-      });
+      this.#bikes.set(bike.id, bike);
 
       this.emit('bike:added', bike.id);
     }
