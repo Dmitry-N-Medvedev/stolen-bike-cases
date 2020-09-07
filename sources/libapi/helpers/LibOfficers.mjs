@@ -12,6 +12,7 @@ const validateOfficer = ajv.compile(OfficerSchema);
 
 export class LibOfficers extends EventEmitter {
   #officers = new Map();
+  #ids = [];
 
   addOfficer(officer) {
     const isOfficerValid = validateOfficer(officer);
@@ -26,9 +27,8 @@ export class LibOfficers extends EventEmitter {
     }
 
     if (this.#officers.has(officer.id) === false) {
-      this.#officers.set(officer.id, {
-        id: officer.id,
-      });
+      this.#officers.set(officer.id, officer);
+      this.#ids.push(officer.id);
 
       this.emit('officer:added', officer.id);
     }
@@ -36,8 +36,13 @@ export class LibOfficers extends EventEmitter {
 
   removeOfficer(id) {
     if (this.#officers.delete(id) === true) {
+      this.#ids.delete(id);
       this.emit('officer:removed', id);
     }
+  }
+
+  get ids() {
+    return this.#ids;
   }
 
   get OfficersNumber() {
